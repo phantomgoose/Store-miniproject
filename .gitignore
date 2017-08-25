@@ -1,4 +1,5 @@
 venv
 *.pyc
 google_auth.py
-db_model.mwb
+*.mwb
+*mwb.bak

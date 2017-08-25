@@ -8,11 +8,65 @@
     <meta name="google-signin-client_id" content="172520154254-53qmq7n798driktlk5nc8uqu277tv2t1.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    {%load static%}
+    <script src="{% static 'store_app/js/script.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'store_app/css/master.css' %}">
 </head>
 
 <body>
-    PH
     {% include '../includes/login_buttons.html' %}
+    <a href="" id="show-cart">Show/hide cart</a>
+    <div class="cart" hidden></div>
+    <div class="item-errors"></div>
+    {% if request.session.admin %}
+    <h3>Add an item:</h3>
+    <form id="create_item" action="{% url 'store-index' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="name">
+        <input type="text" name="description" placeholder="description">
+        <input type="text" name="price" placeholder="price">
+        <input type="submit">
+    </form>
+    <script>
+        $('#create_item').submit(function(){
+            $.ajax({
+                url: "{% url 'store-index' %}",
+                method: 'post',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function(response){
+                    if (response.product_created === true){
+                        $('#create_item').find('input[type=text]').val("");
+                    }
+                    else{
+                        $('.item-errors').html('Could not create item');
+                    }
+                }
+            });
+            return false;
+        });
+    </script>
+    {% endif %}
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Description</th>
+            <th>Price</th>
+            {% if request.session.logged_in %}
+            <th></th>
+            {% endif %}
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{product.name}}</td>
+            <td>{{product.description}}</td>
+            <td>${{product.price}}</td>
+            {% if request.session.logged_in %}
+            <td><form action="store/cart/update" method="post" class="add-to-cart-btn">{% csrf_token %}<input type="hidden" name="product_id" value="{{product.id}}"><input type="number" name="amount" min="0" placeholder="amount"><input type="submit" value="Add to cart"></form><div class="cart-update" style="opacity: 0.0;">ph</div></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 
 </html>

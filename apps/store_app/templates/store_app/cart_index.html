@@ -1,0 +1,22 @@
+<h3>Currently in your cart:</h3>
+{% if products_and_prices %}
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Amount</th>
+        <th>Subtotal</th>
+    </tr>
+    {% for item in products_and_prices %}
+    <tr>
+        <td>{{item.name}}</td>
+        <td>${{item.price}}</td>
+        <td>{{item.amount}}</td>
+        <td>${{item.subtotal}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<h4>Total amount: ${{ total_price }}</h4>
+{% else %}
+<h4>Literally nothing</h4>
+{% endif %}

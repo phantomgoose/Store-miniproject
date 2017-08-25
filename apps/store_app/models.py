@@ -27,7 +27,9 @@ class Order(models.Model):
     credit_card = models.ForeignKey(CreditCard, related_name='orders')
 
 class Product(models.Model):
+    name = models.CharField(max_length=255)
     description = models.TextField(max_length=1000)
+    #price will be in USD for all items, but can be converted to other currencies later
     price = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

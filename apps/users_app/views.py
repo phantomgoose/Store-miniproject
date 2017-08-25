@@ -26,13 +26,17 @@ class UsersLogin(View):
             google_response = json.loads(requests.get(validation_url).content)
             if google_response['aud'] == CLIENT_ID:
                 request.session['user_id'] = google_response['sub']
+                request.session['logged_in'] = True
+                request.session['cart'] = {}
+                if google_response['sub'] == '117169287672856115742':
+                    print "It's Alex! Granting admin."
+                    request.session['admin'] = True
                 print 'login success'
                 server_response['logged_in'] = True
                 server_response['redirect'] = reverse('store-index')
         except Exception:
             print Exception, Exception.message
             print 'login failure'
-        print 'returning json'
         return HttpResponse(json.dumps(server_response))
 
 class UsersLogout(View):

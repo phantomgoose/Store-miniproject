@@ -1,0 +1,7 @@
+table {
+    border: thick solid black;
+    margin-top: 20px;
+}
+td, th {
+    border: thin solid grey;
+}

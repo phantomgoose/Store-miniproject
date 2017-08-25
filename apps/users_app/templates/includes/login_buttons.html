@@ -1,14 +1,13 @@
 <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-{% if 'user_id' not in request.session %}
+{% if 'user_id' not in request.session.keys %}
 <script>
     function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
         // var profile = googleUser.getBasicProfile();
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
-        console.log('logged')
+        console.log('logged');
         $.ajax({
-            url: 'login',
+            url: "{% url 'users-login' %}",
             method: 'post',
             data: {
                 id_token: id_token,
@@ -19,12 +18,12 @@
                 if (response.logged_in === true) {
                     console.log('logged in')
                     $('.server_response').html('Logged in successfully!');
-                    $('.server_response').delay(1000).fadeOut(1000)
+                    $('.server_response').delay(1000).fadeOut(1000);
                     window.location.reload();
                 }
                 else {
                     $('.server_response').html('You did not log in successfully, please try again.');
-                    $('.server_response').delay(1000).fadeOut(1000)
+                    $('.server_response').delay(1000).fadeOut(1000);
                 }
             }
         });
@@ -39,7 +38,7 @@
         var auth2 = gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
             $.ajax({
-                url: 'logout',
+                url: "{% url 'users-logout' %}",
                 dataType: 'json',
                 success: function (response) {
                     if (response.logged_out === true) {
@@ -50,11 +49,12 @@
                     }
                     else {
                         $('.server_response').html('Did NOT log out. Something went horribly wrong.');
-                        $('.server_response').delay(1000).fadeOut(1000)
+                        $('.server_response').delay(1000).fadeOut(1000);
                     }
                 }
             });
         });
+        auth2.disconnect();
     }
 
 </script>
