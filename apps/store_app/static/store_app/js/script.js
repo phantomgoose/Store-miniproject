@@ -10,6 +10,12 @@ $(document).ready(function(){
                 if (response.cart_updated === true){
                     $('.add-to-cart-btn').find('input[name=amount]').val("");
                     $(button).siblings('.cart-update').html(response.server_message).fadeTo(1500, 1.0).fadeTo(1500, 0.0);
+                    $.ajax({
+                        url: "/store/cart/show",
+                        success: function(response){
+                            $('.cart').html(response);
+                        }
+                    });
                 }
                 else {
                     $(button).siblings('.cart-update').html(response.server_message).fadeTo(1500, 1.0).fadeTo(1500, 0.0);
@@ -21,7 +27,7 @@ $(document).ready(function(){
 
     $('#show-cart').click(function(){
         $.ajax({
-            url: "/store/cart/show",
+            url: $(this).attr('href'),
             success: function(response){
                 $('.cart').html(response).slideToggle();
             }
@@ -29,4 +35,13 @@ $(document).ready(function(){
         return false;
     });
 
+    $('.store-remove-link').click(function(){
+        $.ajax({
+            url: $(this).attr('href'),
+            success: function(response){
+                window.location.reload();
+            }
+        });
+        return false;
+    });
 });

@@ -15,7 +15,7 @@
 
 <body>
     {% include '../includes/login_buttons.html' %}
-    <a href="" id="show-cart">Show/hide cart</a>
+    <a href="/store/cart/show" id="show-cart">Show/hide cart</a>
     <div class="cart" hidden></div>
     <div class="item-errors"></div>
     {% if request.session.admin %}
@@ -37,6 +37,7 @@
                 success: function(response){
                     if (response.product_created === true){
                         $('#create_item').find('input[type=text]').val("");
+                        window.location.reload();
                     }
                     else{
                         $('.item-errors').html('Could not create item');
@@ -62,7 +63,7 @@
             <td>{{product.description}}</td>
             <td>${{product.price}}</td>
             {% if request.session.logged_in %}
-            <td><form action="store/cart/update" method="post" class="add-to-cart-btn">{% csrf_token %}<input type="hidden" name="product_id" value="{{product.id}}"><input type="number" name="amount" min="0" placeholder="amount"><input type="submit" value="Add to cart"></form><div class="cart-update" style="opacity: 0.0;">ph</div></td>
+            <td><form action="store/cart/update" method="post" class="add-to-cart-btn">{% csrf_token %}<input type="hidden" name="product_id" value="{{product.id}}"><input type="number" name="amount" min="0" placeholder="amount"><input type="submit" value="Add to cart"></form><div class="cart-update" style="opacity: 0.0;">ph</div>{% if request.session.admin %}<a class="store-remove-link" href="{% url 'store-remove' product_id=product.id %}">Delete</a>{% endif %}</td>
             {% endif %}
         </tr>
         {% endfor %}

@@ -17,6 +17,7 @@
     {% endfor %}
 </table>
 <h4>Total amount: ${{ total_price }}</h4>
+<a href="{% url 'cart-confirm-checkout' %}">Checkout</a>
 {% else %}
 <h4>Literally nothing</h4>
 {% endif %}
